@@ -1,7 +1,5 @@
 # Madrid Pollution Data Science Assessment - Indigitall Interview
 
-**Candidate Perspective:**
-
 ## Overview
 
 This project serves as a personal assessment for an interview with indigitall. The primary focus is to evaluate my programming style, problem-solving skills, and the ability to present results and justify decisions.
@@ -29,11 +27,11 @@ The task involves storing NO2 air pollution level data for Madrid during the yea
 - Visualize pollution evolution through daily/monthly graphs, animated heat maps, etc.
 - Conduct analyses of extraordinary situations, such as days with restrictions, and measure the effectiveness of certain measures.
 
-The data is available on the Madrid Open Data portal [here](link-to-data). The PDF documentation provided should be consulted for valuable insights into the dataset. Key considerations include:
+The data is available on the Madrid Open Data portal [here](https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=f3c0f7d512273410VgnVCM2000000c205a0aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default). The PDF documentation provided should be consulted for valuable insights into the dataset. Key considerations include:
 - Downloading data specifically for the year 2018.
 - Focusing solely on NO2 measurements; discarding measurements of other pollutants.
-- Accessing information about measurement stations [here](link-to-stations) if needed.
-- Acquiring information about hourly temperatures in Madrid for 2018 [here](link-to-temperatures).
+- Accessing information about measurement stations [here](https://gist.github.com/koldLight/533038c852ca0a546da247292b5d9ab9) if needed.
+- Acquiring information about hourly temperatures in Madrid for 2018 [here](https://gist.github.com/koldLight/90577c60ad4267d4df490e6239cebf58).
 
 ### Objectives
 1. **Data Handling:**

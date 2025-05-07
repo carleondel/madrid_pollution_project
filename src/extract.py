@@ -1,8 +1,15 @@
-# src/extract.py
+
 
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
+import os
+
+# Directorio base del proyecto (padre de 'src')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+os.makedirs(DATA_DIR, exist_ok=True)
+
 
 today = datetime.today()
 yesterday = today - timedelta(days=1)
@@ -22,4 +29,4 @@ data = response.json()
 
 df = pd.DataFrame(data['hourly'])
 df['time'] = pd.to_datetime(df['time'])
-df.to_csv("../data/no2_madrid.csv", index=False)
+df.to_csv(os.path.join(DATA_DIR, "no2_madrid.csv"), index=False)

@@ -18,5 +18,5 @@ df_transformed = df.dropna(subset=["nitrogen_dioxide"])
 
 # Agregar media por hora (innecesario si ya es horario, pero sirve como ejemplo)
 # df_clean = df_clean.resample("1H", on="time").mean().reset_index()
-
+df_transformed = df_transformed.rename(columns={"nitrogen_dioxide": "no2"})
 df_transformed.to_csv(os.path.join(DATA_DIR, "no2_transformed.csv"), index=False)

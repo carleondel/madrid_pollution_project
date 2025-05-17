@@ -61,3 +61,6 @@ This repository contains a personal project analyzing and forecasting NO₂ poll
                    ┌───────────────────┐  
                    │ Dashboard & Alerts│  
                    └───────────────────┘  
+
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/carleondel/madrid_pollution_project)

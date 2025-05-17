@@ -25,6 +25,10 @@ This repository contains a personal project analyzing and forecasting NO₂ poll
   - Set up unit/integration tests and CI/CD (GitHub Actions).  
   - Deploy model serving via FastAPI + Docker.  
   - Monitor pipeline health and model performance.
+- **Infrastructure**
+  - PostgreSQL set up via Docker (`docker-compose`)
+  - `.env` file for managing environment variables (excluded from Git)
+  - Test script to verify database connection (`tests/connection_postgres.py`)
 
 ---
 
@@ -44,7 +48,7 @@ This repository contains a personal project analyzing and forecasting NO₂ poll
                            ▼  
                    ┌────────────────────┐  
                    │ Warehouse          │  
-                   │ (Redshift/BigQuery)│   
+                   │ (Postgres/Docker)  │   
                    └────────────────────┘  
                            │  
                            ▼  

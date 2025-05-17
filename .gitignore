@@ -21,3 +21,13 @@ notebooks/*.parquet
 
 # archive files
 /data/
+
+# Environment variables
+infra/.env
+
+# Docker volumes (PostgreSQL, Airflow, dbt)
+infra/postgres_data/
+infra/airflow/logs/
+infra/airflow/plugins/
+infra/dbt/target/
+infra/dbt/dbt_packages/

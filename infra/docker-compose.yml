@@ -1,20 +1,25 @@
 version: '3.8'
 
 services:
-  postgres:
+  postgres-db:
     image: postgres:15
-    container_name: madrid_postgres
-    environment:
-      POSTGRES_USER: madrid_user
-      POSTGRES_PASSWORD: madrid_pass
-      POSTGRES_DB: madrid_pollution
+    container_name: postgres-db
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - madrid_net
 
 volumes:
   postgres_data:
+
+networks:
+  madrid_net:
+    driver: bridge
+
 
 
 # "Run a PostgreSQL container using the official image, set credentials,

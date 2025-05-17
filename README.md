@@ -48,7 +48,7 @@ This repository contains a personal project analyzing and forecasting NO₂ poll
                            ▼  
                    ┌────────────────────┐  
                    │ Warehouse          │  
-                   │ (Postgres/Docker)  │   
+                   │ (PostgreSQL/Docker)│   
                    └────────────────────┘  
                            │  
                            ▼  

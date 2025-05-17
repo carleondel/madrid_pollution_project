@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: madrid_postgres
+    environment:
+      POSTGRES_USER: madrid_user
+      POSTGRES_PASSWORD: madrid_pass
+      POSTGRES_DB: madrid_pollution
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+
+# "Run a PostgreSQL container using the official image, set credentials,
+# expose it on port 5432, and save the data in a volume so it persists."

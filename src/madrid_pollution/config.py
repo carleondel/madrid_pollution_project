@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     artifacts_dir: Path = PROJECT_ROOT / "artifacts"
     reports_dir: Path = PROJECT_ROOT / "reports"
 
+    @property
+    def project_root(self) -> Path:
+        """Return the repository root used to resolve versioned documentation assets."""
+
+        return PROJECT_ROOT
+
     def ensure_directories(self) -> None:
         """Create local runtime directories that are intentionally not tracked."""
 

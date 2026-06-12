@@ -8,7 +8,10 @@ from datetime import date
 from madrid_pollution import __version__
 from madrid_pollution.config import get_settings
 from madrid_pollution.logging import configure_logging
+from madrid_pollution.modeling.prediction import predict_latest
+from madrid_pollution.modeling.training import train_all_horizons
 from madrid_pollution.pipeline import ingest_air_quality, ingest_stations, ingest_weather
+from madrid_pollution.reporting import generate_report_assets
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -32,6 +35,12 @@ def build_parser() -> argparse.ArgumentParser:
     weather_parser.add_argument("--start-date", type=date.fromisoformat, required=True)
     weather_parser.add_argument("--end-date", type=date.fromisoformat, required=True)
     weather_parser.add_argument("--no-database", action="store_true")
+
+    train_parser = subparsers.add_parser("train", help="Backtest and train direct models")
+    train_parser.add_argument("--quick", action="store_true")
+
+    subparsers.add_parser("predict", help="Generate latest station forecasts")
+    subparsers.add_parser("report", help="Generate README metrics and charts")
     return parser
 
 
@@ -86,6 +95,38 @@ def main(argv: Sequence[str] | None = None) -> int:
             load_database=not args.no_database,
         )
         print(json.dumps({"dataset": "weather", "rows": len(frame)}))
+        return 0
+
+    if args.command == "train":
+        metrics = train_all_horizons(
+            settings.processed_data_dir,
+            settings.artifacts_dir,
+            settings.reports_dir,
+            n_splits=2 if args.quick else 3,
+            validation_days=7 if args.quick else 14,
+            min_training_days=90 if args.quick else 180,
+            max_training_days=365 if args.quick else 730,
+            n_estimators=50 if args.quick else 200,
+        )
+        print(json.dumps({"metric_rows": len(metrics), "quick": args.quick}))
+        return 0
+
+    if args.command == "predict":
+        forecasts = predict_latest(
+            settings.processed_data_dir,
+            settings.artifacts_dir,
+            settings.reports_dir,
+        )
+        print(json.dumps({"forecast_rows": len(forecasts)}))
+        return 0
+
+    if args.command == "report":
+        summary = generate_report_assets(
+            settings.processed_data_dir,
+            settings.reports_dir,
+            settings.project_root / "docs" / "assets",
+        )
+        print(json.dumps(summary))
         return 0
 
     return 2

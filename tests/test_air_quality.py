@@ -41,6 +41,15 @@ def test_normalize_air_quality_rejects_missing_schema() -> None:
         normalize_air_quality_csv(b"ANO;MES\n2018;1\n", source_file="broken.csv")
 
 
+def test_normalize_air_quality_supports_latin1_source_files() -> None:
+    text = (FIXTURES / "air_quality_sample.csv").read_text()
+    text = text.replace("28079004_8_8", "28079004_8_8ñ")
+
+    result = normalize_air_quality_csv(text.encode("latin-1"), source_file="latin1.csv")
+
+    assert len(result) == 23
+
+
 def test_air_quality_url_rejects_unsupported_year() -> None:
     with pytest.raises(ValueError, match="Unsupported"):
         air_quality_url(2017)

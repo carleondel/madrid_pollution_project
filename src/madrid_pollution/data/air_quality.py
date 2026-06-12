@@ -15,21 +15,21 @@ from madrid_pollution.data.http import get_bytes
 
 NO2_MAGNITUDE_CODE = 8
 MADRID_TIMEZONE = "Europe/Madrid"
-AIR_QUALITY_URLS = {
-    year: f"https://datos.madrid.es/egob/catalogo/201200-{catalog_id}-calidad-aire-horario.zip"
-    for year, catalog_id in {
-        2018: 10306314,
-        2019: 10306315,
-        2020: 10306316,
-        2021: 10306317,
-        2022: 10306318,
-        2023: 10306319,
-        2024: 10306320,
-    }.items()
+RESOURCE_BASE_URL = "https://datos.madrid.es/dataset/201200-0-calidad-aire-horario/resource"
+AIR_QUALITY_RESOURCES = {
+    2018: "201200-18-calidad-aire-horario-zip",
+    2019: "201200-6-calidad-aire-horario-zip",
+    2020: "201200-4-calidad-aire-horario-zip",
+    2021: "201200-5-calidad-aire-horario-zip",
+    2022: "201200-23-calidad-aire-horario-zip",
+    2023: "201200-3-calidad-aire-horario-zip",
+    2024: "201200-0-calidad-aire-horario-zip",
+    2025: "201200-1-calidad-aire-horario-csv",
 }
-AIR_QUALITY_URLS[2025] = (
-    "https://datos.madrid.es/egob/catalogo/201200-10306322-calidad-aire-horario.csv"
-)
+AIR_QUALITY_URLS = {
+    year: f"{RESOURCE_BASE_URL}/{resource}/download/{resource}"
+    for year, resource in AIR_QUALITY_RESOURCES.items()
+}
 
 BASE_COLUMNS = [
     "PROVINCIA",
@@ -73,7 +73,8 @@ def download_air_quality_year(
     """Download one official annual resource into the raw cache."""
 
     url = air_quality_url(year)
-    suffix = ".zip" if url.endswith(".zip") else ".csv"
+    resource = AIR_QUALITY_RESOURCES[year]
+    suffix = ".zip" if resource.endswith("-zip") else ".csv"
     destination = cache_dir / "madrid_open_data" / f"air_quality_{year}{suffix}"
     if destination.exists() and not force:
         return destination
@@ -105,13 +106,21 @@ def iter_csv_payloads(path: Path) -> Iterator[tuple[str, bytes]]:
 
 
 def _read_source_csv(payload: bytes) -> pd.DataFrame:
-    frame = pd.read_csv(
-        io.BytesIO(payload),
-        sep=";",
-        dtype=str,
-        encoding="utf-8-sig",
-        low_memory=False,
-    )
+    frame: pd.DataFrame | None = None
+    for encoding in ("utf-8-sig", "latin-1"):
+        try:
+            frame = pd.read_csv(
+                io.BytesIO(payload),
+                sep=";",
+                dtype=str,
+                encoding=encoding,
+                low_memory=False,
+            )
+            break
+        except UnicodeDecodeError:
+            continue
+    if frame is None:
+        raise ValueError("Madrid air-quality CSV uses an unsupported text encoding")
     frame.columns = frame.columns.str.strip().str.upper()
     missing = set(BASE_COLUMNS).difference(frame.columns)
     if missing:

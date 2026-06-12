@@ -2,8 +2,10 @@
 
 UV_CACHE_DIR ?= .uv-cache
 export UV_CACHE_DIR
+MPLCONFIGDIR ?= .matplotlib-cache
+export MPLCONFIGDIR
 
-.PHONY: help setup status lint format test quality up down ingest ingest-local dbt-parse dbt-build
+.PHONY: help setup status lint format test quality up down ingest ingest-local dbt-parse dbt-build train train-quick predict report demo
 
 help:
 	@printf '%s\n' \
@@ -18,7 +20,12 @@ help:
 		'ingest   Ingest official data into Parquet and PostgreSQL' \
 		'ingest-local  Ingest one demo year into Parquet without PostgreSQL' \
 		'dbt-parse  Validate the dbt project without running models' \
-		'dbt-build  Build and test all dbt models'
+		'dbt-build  Build and test all dbt models' \
+		'train     Backtest and train all forecast horizons' \
+		'train-quick  Run a reduced local training smoke test' \
+		'predict   Generate latest station forecasts' \
+		'report    Generate metrics tables and README charts' \
+		'demo      Rebuild predictions, reports, and run quality checks'
 
 setup:
 	uv sync --all-groups
@@ -60,3 +67,17 @@ dbt-parse:
 
 dbt-build:
 	uv run dbt build --project-dir dbt --profiles-dir dbt
+
+train:
+	uv run madrid-pollution train
+
+train-quick:
+	uv run madrid-pollution train --quick
+
+predict:
+	uv run madrid-pollution predict
+
+report:
+	uv run madrid-pollution report
+
+demo: predict report quality

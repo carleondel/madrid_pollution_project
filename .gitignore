@@ -18,6 +18,7 @@ __pypackages__/
 .pytest_cache/
 .uv-cache/
 .pre-commit-cache/
+.matplotlib-cache/
 .coverage
 htmlcov/
 

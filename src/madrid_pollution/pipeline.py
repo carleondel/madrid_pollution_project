@@ -44,6 +44,9 @@ def ingest_air_quality(
             LOGGER.info("Ingesting official Madrid NO2 observations for %s", year)
             resource = download_air_quality_year(client, year, settings.raw_data_dir, force=force)
             frame = parse_air_quality_resource(resource)
+            frame = frame.loc[frame["source_year"].eq(year)].copy()
+            if frame.empty:
+                raise ValueError(f"The official resource contains no NO2 rows for {year}")
             write_parquet(
                 frame,
                 settings.processed_data_dir / "air_quality" / f"year={year}" / "data.parquet",

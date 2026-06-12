@@ -1,13 +1,54 @@
-run: extract transform train predict
+.DEFAULT_GOAL := help
 
-extract:
-	python src/extract.py
+UV_CACHE_DIR ?= .uv-cache
+export UV_CACHE_DIR
 
-transform:
-	python src/transform.py
+.PHONY: help setup status lint format test quality up down ingest ingest-local
 
-train:
-	python src/train.py
+help:
+	@printf '%s\n' \
+		'setup    Install locked project and development dependencies' \
+		'status   Show resolved local project configuration' \
+		'lint     Run Ruff lint and formatting checks' \
+		'format   Apply Ruff lint fixes and formatting' \
+		'test     Run the Python test suite with coverage' \
+		'quality  Run lint and tests' \
+		'up       Start local PostgreSQL' \
+		'down     Stop local services' \
+		'ingest   Ingest official data into Parquet and PostgreSQL' \
+		'ingest-local  Ingest one demo year into Parquet without PostgreSQL'
 
-predict:
-	python src/predict.py
+setup:
+	uv sync --all-groups
+
+status:
+	uv run madrid-pollution status
+
+lint:
+	uv run ruff check .
+	uv run ruff format --check .
+
+format:
+	uv run ruff check --fix .
+	uv run ruff format .
+
+test:
+	uv run pytest --cov=madrid_pollution --cov-report=term-missing
+
+quality: lint test
+
+up:
+	docker compose --env-file .env -f infra/docker-compose.yml up -d --wait
+
+down:
+	docker compose --env-file .env -f infra/docker-compose.yml down
+
+ingest:
+	uv run madrid-pollution ingest-stations
+	uv run madrid-pollution ingest-air-quality
+	uv run madrid-pollution ingest-weather --start-date 2018-01-01 --end-date 2025-12-31
+
+ingest-local:
+	uv run madrid-pollution ingest-stations --no-database
+	uv run madrid-pollution ingest-air-quality --years 2024 --no-database
+	uv run madrid-pollution ingest-weather --start-date 2024-01-01 --end-date 2024-01-07 --no-database

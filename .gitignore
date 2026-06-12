@@ -12,17 +12,25 @@ env/
 # Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Poetry (ya no lo usamos)
-poetry.lock
+# Python project tooling
 __pypackages__/
+.ruff_cache/
+.pytest_cache/
+.uv-cache/
+.pre-commit-cache/
+.coverage
+htmlcov/
 
 # .parquet files
 notebooks/*.parquet
 
-# archive files
+# Runtime data and generated outputs
 /data/
+/artifacts/
+/reports/
 
 # Environment variables
+.env
 infra/.env
 
 # Docker volumes (PostgreSQL, Airflow, dbt)
@@ -31,3 +39,8 @@ infra/airflow/logs/
 infra/airflow/plugins/
 infra/dbt/target/
 infra/dbt/dbt_packages/
+
+# dbt generated files
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/

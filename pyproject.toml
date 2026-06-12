@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "madrid-pollution"
+version = "0.1.0"
+description = "Reproducible station-level NO2 forecasting for Madrid"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "Carlos Leon" }]
+dependencies = [
+    "httpx>=0.28,<1",
+    "joblib>=1.4,<2",
+    "numpy>=2.1,<3",
+    "pandas>=2.2,<3",
+    "psycopg[binary]>=3.2,<4",
+    "pyarrow>=18,<24",
+    "pydantic-settings>=2.7,<3",
+    "scikit-learn>=1.6,<2",
+    "sqlalchemy>=2.0,<3",
+    "tenacity>=9,<10",
+    "xgboost>=2.1,<4",
+]
+
+[project.scripts]
+madrid-pollution = "madrid_pollution.cli:main"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.1,<5",
+    "pytest>=8.3,<10",
+    "pytest-cov>=6,<8",
+    "respx>=0.22,<1",
+    "ruff>=0.13,<1",
+]
+dbt = [
+    "dbt-postgres>=1.9,<2",
+    "sqlfluff>=3.4,<5",
+    "sqlfluff-templater-dbt>=3.4,<5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/madrid_pollution"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["madrid_pollution"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [
+    "notebooks/legacy",
+    "src/extract.py",
+    "src/predict.py",
+    "src/train.py",
+    "src/transform.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[tool.sqlfluff.core]
+dialect = "postgres"
+templater = "dbt"
+max_line_length = 100
+
+[tool.sqlfluff.templater.dbt]
+project_dir = "dbt"
+profiles_dir = "dbt"
+profile = "madrid_pollution"
+target = "local"

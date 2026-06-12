@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: int_station_hourly
+    description: >-
+      Hourly NO2 observations enriched with station metadata and same-hour historical
+      weather. Future weather is not used by the forecasting feature pipeline.
+    columns:
+      - name: station_id
+        description: Official Madrid station identifier.
+        data_tests: [not_null]
+      - name: observed_at
+        description: Start of the measured hour in UTC.
+        data_tests: [not_null]
+      - name: no2_ug_m3
+        description: Valid measured NO2 concentration.
+        data_tests: [not_null, non_negative]
+      - name: station_name
+        description: Human-readable official station name.
+        data_tests: [not_null]
+      - name: station_type
+        description: Official station classification.
+      - name: altitude_m
+        description: Station altitude in metres.
+      - name: station_longitude
+        description: WGS84 station longitude.
+      - name: station_latitude
+        description: WGS84 station latitude.
+      - name: temperature_2m
+        description: Same-hour historical temperature for analytical use.
+      - name: relative_humidity_2m
+        description: Same-hour historical relative humidity for analytical use.
+      - name: precipitation
+        description: Same-hour historical precipitation for analytical use.
+      - name: pressure_msl
+        description: Same-hour historical mean sea-level pressure.
+      - name: wind_speed_10m
+        description: Same-hour historical wind speed.
+      - name: wind_direction_10m
+        description: Same-hour historical wind direction.
+      - name: source_year
+        description: Calendar year declared by the official source row.
+      - name: ingested_at
+        description: UTC ingestion timestamp for the source observation.

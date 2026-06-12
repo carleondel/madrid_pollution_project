@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: stg_weather
+    description: Hourly historical weather for central Madrid in UTC.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: observed_at
+        description: Weather observation timestamp in UTC.
+        data_type: timestamp with time zone
+        data_tests: [not_null, unique]
+      - name: temperature_2m
+        description: Air temperature two metres above ground in degrees Celsius.
+        data_type: double precision
+      - name: relative_humidity_2m
+        description: Relative humidity two metres above ground in percent.
+        data_type: double precision
+      - name: precipitation
+        description: Hourly precipitation in millimetres.
+        data_type: double precision
+      - name: pressure_msl
+        description: Mean sea-level pressure in hectopascals.
+        data_type: double precision
+      - name: wind_speed_10m
+        description: Wind speed ten metres above ground in kilometres per hour.
+        data_type: double precision
+      - name: wind_direction_10m
+        description: Wind direction ten metres above ground in degrees.
+        data_type: double precision
+      - name: latitude
+        description: Latitude returned by Open-Meteo for the selected grid cell.
+        data_type: double precision
+      - name: longitude
+        description: Longitude returned by Open-Meteo for the selected grid cell.
+        data_type: double precision
+      - name: source
+        description: Weather provider identifier.
+        data_type: character varying
+        data_tests: [not_null]
+      - name: ingested_at
+        description: UTC ingestion timestamp.
+        data_type: timestamp with time zone
+        data_tests: [not_null]

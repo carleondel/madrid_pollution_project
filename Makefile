@@ -3,7 +3,7 @@
 UV_CACHE_DIR ?= .uv-cache
 export UV_CACHE_DIR
 
-.PHONY: help setup status lint format test quality up down ingest ingest-local
+.PHONY: help setup status lint format test quality up down ingest ingest-local dbt-parse dbt-build
 
 help:
 	@printf '%s\n' \
@@ -16,7 +16,9 @@ help:
 		'up       Start local PostgreSQL' \
 		'down     Stop local services' \
 		'ingest   Ingest official data into Parquet and PostgreSQL' \
-		'ingest-local  Ingest one demo year into Parquet without PostgreSQL'
+		'ingest-local  Ingest one demo year into Parquet without PostgreSQL' \
+		'dbt-parse  Validate the dbt project without running models' \
+		'dbt-build  Build and test all dbt models'
 
 setup:
 	uv sync --all-groups
@@ -52,3 +54,9 @@ ingest-local:
 	uv run madrid-pollution ingest-stations --no-database
 	uv run madrid-pollution ingest-air-quality --years 2024 --no-database
 	uv run madrid-pollution ingest-weather --start-date 2024-01-01 --end-date 2024-01-07 --no-database
+
+dbt-parse:
+	uv run dbt parse --project-dir dbt --profiles-dir dbt
+
+dbt-build:
+	uv run dbt build --project-dir dbt --profiles-dir dbt

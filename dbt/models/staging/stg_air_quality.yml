@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: stg_air_quality
+    description: Valid hourly NO2 observations with stable names and types.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: station_id
+        description: Official Madrid station identifier.
+        data_type: character varying
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_stations')
+                field: station_id
+      - name: observed_at
+        description: Start of the measured hour in UTC.
+        data_type: timestamp with time zone
+        data_tests: [not_null]
+      - name: no2_ug_m3
+        description: NO2 concentration in micrograms per cubic metre.
+        data_type: double precision
+        data_tests:
+          - not_null
+          - non_negative
+      - name: source_year
+        description: Calendar year declared by the official source row.
+        data_type: integer
+        data_tests: [not_null]
+      - name: source_file
+        description: CSV member or file from which the row was parsed.
+        data_type: character varying
+        data_tests: [not_null]
+      - name: ingested_at
+        description: UTC ingestion timestamp.
+        data_type: timestamp with time zone
+        data_tests: [not_null]

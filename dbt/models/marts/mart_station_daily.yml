@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: mart_station_daily
+    description: Daily station-level summary for reporting and data-quality review.
+    columns:
+      - name: station_id
+        description: Official Madrid station identifier.
+        data_tests: [not_null]
+      - name: station_name
+        description: Human-readable official station name.
+        data_tests: [not_null]
+      - name: observed_date
+        description: UTC calendar day of the observations.
+        data_tests: [not_null]
+      - name: observed_hours
+        description: Number of valid hourly observations in the day.
+        data_tests: [not_null]
+      - name: avg_no2_ug_m3
+        description: Mean daily NO2 concentration.
+        data_tests: [not_null, non_negative]
+      - name: min_no2_ug_m3
+        description: Minimum daily NO2 concentration.
+        data_tests: [not_null, non_negative]
+      - name: max_no2_ug_m3
+        description: Maximum daily NO2 concentration.
+        data_tests: [not_null, non_negative]

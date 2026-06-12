@@ -1,0 +1,42 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Normalized source data loaded by the Python ingestion pipeline.
+    schema: raw
+    loader: madrid_pollution
+    tables:
+      - name: air_quality
+        description: Valid official hourly NO2 observations from Madrid monitoring stations.
+        config:
+          loaded_at_field: ingested_at
+          freshness:
+            warn_after: {count: 14, period: day}
+            error_after: {count: 45, period: day}
+        columns:
+          - name: station_id
+            description: Official Madrid station identifier.
+            data_tests: [not_null]
+          - name: observed_at
+            description: Start of the measured hourly interval in UTC.
+            data_tests: [not_null]
+          - name: no2_ug_m3
+            description: Valid hourly NO2 concentration in micrograms per cubic metre.
+            data_tests: [not_null]
+      - name: stations
+        description: Official catalogue and geographic metadata for monitoring stations.
+        columns:
+          - name: station_id
+            description: Official Madrid station identifier.
+            data_tests: [not_null, unique]
+      - name: weather
+        description: Central Madrid historical weather observations from Open-Meteo.
+        config:
+          loaded_at_field: ingested_at
+          freshness:
+            warn_after: {count: 14, period: day}
+            error_after: {count: 45, period: day}
+        columns:
+          - name: observed_at
+            description: Weather observation timestamp in UTC.
+            data_tests: [not_null, unique]

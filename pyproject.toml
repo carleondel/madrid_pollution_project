@@ -75,11 +75,6 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 
 [tool.sqlfluff.core]
 dialect = "postgres"
-templater = "dbt"
+templater = "jinja"
 max_line_length = 100
-
-[tool.sqlfluff.templater.dbt]
-project_dir = "dbt"
-profiles_dir = "dbt"
-profile = "madrid_pollution"
-target = "local"
+ignore = "templating"

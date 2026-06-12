@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: fct_no2_observations
+    description: Canonical station-hour fact table consumed by the forecasting pipeline.
+    columns:
+      - name: station_id
+        description: Official Madrid station identifier.
+        data_tests: [not_null]
+      - name: observed_at
+        description: Start of the measured hour in UTC.
+        data_tests: [not_null]
+      - name: no2_ug_m3
+        description: Valid measured NO2 concentration.
+        data_tests: [not_null, non_negative]
+      - name: station_name
+        description: Human-readable official station name.
+        data_tests: [not_null]
+      - name: station_type
+        description: Official station classification.
+      - name: altitude_m
+        description: Station altitude in metres.
+      - name: station_longitude
+        description: WGS84 station longitude.
+      - name: station_latitude
+        description: WGS84 station latitude.
+      - name: source_year
+        description: Calendar year declared by the official source row.
+        data_tests: [not_null]

@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_stations
+    description: Monitoring stations in the official catalogue that measure NO2.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: station_id
+        description: Official Madrid station identifier.
+        data_type: character varying
+        data_tests: [not_null, unique]
+      - name: station_code
+        description: Short numeric station code.
+        data_type: integer
+      - name: station_name
+        description: Human-readable official station name.
+        data_type: character varying
+        data_tests: [not_null]
+      - name: address
+        description: Official station address.
+        data_type: character varying
+      - name: station_type_code
+        description: Official station classification code.
+        data_type: character varying
+      - name: station_type
+        description: Traffic, urban background, or suburban classification.
+        data_type: character varying
+      - name: altitude_m
+        description: Station altitude above sea level in metres.
+        data_type: double precision
+      - name: longitude
+        description: WGS84 longitude.
+        data_type: double precision
+      - name: latitude
+        description: WGS84 latitude.
+        data_type: double precision
+      - name: opened_on
+        description: Date when the station entered service.
+        data_type: date
+      - name: measures_no2
+        description: Whether the current catalogue lists an NO2 analyser.
+        data_type: boolean
+        data_tests: [not_null]
+      - name: ingested_at
+        description: UTC ingestion timestamp.
+        data_type: timestamp with time zone
+        data_tests: [not_null]

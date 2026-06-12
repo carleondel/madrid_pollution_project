@@ -184,9 +184,9 @@ Gate:
 | Phase | Status | Gate |
 |---|---|---|
 | 1. Foundations | Complete | `make setup && make lint && make test` passing |
-| 2. Data pipeline | In progress | Rebuild and idempotency checks |
-| 3. dbt | Pending | `make dbt-build` |
-| 4. Forecasting | Pending | Deterministic leakage-safe backtest |
-| 5. MVP demo | Pending | Clean-clone end-to-end workflow |
+| 2. Data pipeline | Integration pending | Parquet rebuild passes; PostgreSQL gate pending |
+| 3. dbt | Integration pending | Parse/lint pass; `make dbt-build` pending PostgreSQL |
+| 4. Forecasting | Complete | Deterministic leakage-safe backtest passes |
+| 5. MVP demo | In progress | Parquet demo passes; clean-clone database path pending |
 | 6. FastAPI | Post-MVP | API contract tests |
 | 7. Operations | Optional | Scheduled workflow and health checks |
